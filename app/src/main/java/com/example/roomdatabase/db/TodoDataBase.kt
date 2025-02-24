@@ -18,7 +18,6 @@ abstract class TodoDataBase:RoomDatabase() {
         fun getDatabase(context: Context):TodoDataBase{
             val tempInstace= INSTANCE
             if(tempInstace!=null){
-
                 return tempInstace
             }
            synchronized(this){

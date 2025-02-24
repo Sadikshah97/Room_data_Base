@@ -28,12 +28,5 @@ interface TodoDao {
     suspend fun deleteAllUser()
 
 
-   // fun readAllData():LiveData<List<TodoManager>>
-
-   /* @Query("Delete FROM TodoManager where id = :id")
-    fun deleteTodo(id: Int)
-   */
-    /*@Update
-    fun updateTodo(todo: TodoManager)
-*/
+ 
 }

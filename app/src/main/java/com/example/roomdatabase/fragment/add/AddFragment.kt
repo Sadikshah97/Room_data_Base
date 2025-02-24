@@ -26,16 +26,48 @@ class AddFragment : Fragment() {
         ): View? {
             binding = FragmentAddBinding.inflate(inflater, container, false)
               viewModel= ViewModelProvider(this)[TodoViewModel::class.java]
-       binding.addBtn.setOnClickListener {
+            binding.addBtn.setOnClickListener {
            insertDataToDatabase()
        }
 
             return binding.root
         }
 
+
     private fun insertDataToDatabase() {
-        val firstName = binding.addFirstNameEt.text.toString()
-        val lastName = binding.addLastNameEt.text.toString()
+        val firstName = binding.addFirstNameEt.text.toString().trim()
+        val lastName = binding.addLastNameEt.text.toString().trim()
+        val ageText = binding.addAgeEt.text.toString().trim()
+
+        if (inputCheck(firstName, lastName, ageText)) {
+            val age = ageText.toIntOrNull()
+
+            if (age == null) {
+                Toast.makeText(requireContext(), "Please enter a valid age.", Toast.LENGTH_LONG).show()
+                return
+            }
+
+            // Create User Object
+            val user = TodoManager(0, firstName, lastName, age)
+
+            // Add Data to Database
+            viewModel.addUser(user)
+            Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG).show()
+
+            // Navigate Back
+            findNavController().navigate(R.id.action_addFragment_to_listFragment)
+        } else {
+            Toast.makeText(requireContext(), "Please fill out all fields.", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    // Modify the inputCheck function
+
+
+
+    /* private fun insertDataToDatabase() {
+        val firstName = binding.addFirstNameEt.text.toString().trim()
+        val lastName = binding.addLastNameEt.text.toString().trim()
         val age = binding.addAgeEt.text
 
         if(inputCheck(firstName, lastName, age)){
@@ -50,8 +82,12 @@ class AddFragment : Fragment() {
             Toast.makeText(requireContext(), "Please fill out all fields.", Toast.LENGTH_LONG).show()
         }
     }
+   */
     private fun inputCheck(firstName: String, lastName: String, age: Editable): Boolean{
         return !(TextUtils.isEmpty(firstName) && TextUtils.isEmpty(lastName) && age.isEmpty())
+    }
+    private fun inputCheck(firstName: String, lastName: String, age: String): Boolean {
+        return firstName.isNotEmpty() && lastName.isNotEmpty() && age.isNotEmpty()
     }
 
 }

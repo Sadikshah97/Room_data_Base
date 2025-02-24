@@ -40,7 +40,7 @@ class UpdateFragment : Fragment() {
         setHasOptionsMenu(true)
         return binding.root
     }
-    fun updateItem(){
+   /* fun updateItem(){
         val firsName=binding.updateFirstNameEt.text.toString()
         val lastName=binding.updateLastNameEt.text.toString()
         val age = Integer.parseInt(binding.updateAgeEt.text.toString())
@@ -56,6 +56,37 @@ class UpdateFragment : Fragment() {
     }
     private fun inputCheck(firstName: String, lastName: String, age: Editable): Boolean{
         return !(TextUtils.isEmpty(firstName) && TextUtils.isEmpty(lastName) && age.isEmpty())
+    }
+*/
+   private fun updateItem() {
+       val firstName = binding.updateFirstNameEt.text.toString().trim()
+       val lastName = binding.updateLastNameEt.text.toString().trim()
+       val ageText = binding.updateAgeEt.text.toString().trim()
+
+       if (inputCheck(firstName, lastName, ageText)) {
+           val age = ageText.toIntOrNull()
+
+           if (age == null) {
+               Toast.makeText(requireContext(), "Please enter a valid age.", Toast.LENGTH_LONG).show()
+               return
+           }
+
+           // Create Updated User Object
+           val updatedUser = TodoManager(args.currentUser.id, firstName, lastName, age)
+
+           // Update Data in Database
+           viewModel.updateUser(updatedUser)
+           Toast.makeText(requireContext(), "Successfully updated!", Toast.LENGTH_LONG).show()
+
+           // Navigate Back
+           findNavController().navigate(R.id.action_updateFragment_to_listFragment)
+       } else {
+           Toast.makeText(requireContext(), "Please fill out all fields.", Toast.LENGTH_LONG).show()
+       }
+   }
+
+    private fun inputCheck(firstName: String, lastName: String, age: String): Boolean {
+        return firstName.isNotEmpty() && lastName.isNotEmpty() && age.isNotEmpty()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
